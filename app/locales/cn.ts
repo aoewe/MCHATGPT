@@ -146,11 +146,6 @@ const cn = {
       Check: "重新检查",
       NoAccess: "输入 API Key 或访问密码查看余额",
     },
-    account: {
-      Title: "账号",
-      SubTitle: "已开启账号验证",
-      Placeholder: "请输入访问密码",
-    },
     AccessCode: {
       Title: "访问密码",
       SubTitle: "已开启加密访问",
