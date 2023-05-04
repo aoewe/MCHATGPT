@@ -1,83 +1,47 @@
-<div align="center">
+OPENAI_API_KEY（必需的）
+你的 openai api 密钥。
 
-> [简体中文 > 如何开始使用](./README_CN.md#开始使用)
+CODE（选修的）
+访问密码，以逗号分隔。
 
-1. Get [OpenAI API Key](https://platform.openai.com/account/api-keys);
-2. Click
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYidadaa%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web), remember that `CODE` is your page password;
-3. Enjoy :)
+BASE_URL（选修的）
+默认：https://api.openai.com
 
-## FAQ
+例子：http://your-openai-proxy.com
 
+覆盖 openai api 请求基本 url。
 
-> [简体中文 > 如何配置 api key、访问密码、接口代理](./README_CN.md#环境变量)
+OPENAI_ORG_ID（选修的）
+指定 OpenAI 组织 ID。
 
-### `OPENAI_API_KEY` (required)
+HIDE_USER_API_KEY（选修的）
+默认值：空
 
-Your openai api key.
+如果您不希望用户输入自己的 API 密钥，请将此环境变量设置为 1。
 
-### `CODE` (optional)
+发展
+简体中文 > 如何进行二次开发
 
-Access passsword, separated by comma.
-
-### `BASE_URL` (optional)
-
-> Default: `https://api.openai.com`
-
-> Examples: `http://your-openai-proxy.com`
-
-Override openai api request base url.
-
-### `OPENAI_ORG_ID` (optional)
-
-Specify OpenAI organization ID.
-
-### `HIDE_USER_API_KEY` (optional)
-
-> Default: Empty
-
-If you do not want users to input their own API key, set this environment variable to 1.
-
-## Development
-
-> [简体中文 > 如何进行二次开发](./README_CN.md#开发)
-
-```
 OPENAI_API_KEY=<your api key here>
-```
-
-### Local Development
-
-```shell
+地方发展
 # 1. install nodejs and yarn first
 # 2. config local env vars in `.env.local`
 # 3. run
 yarn install
 yarn dev
-```
-
-## Deployment
-
-
-### Docker (Recommended)
-
-```shell
+部署
+Docker（推荐）
 docker pull yidadaa/chatgpt-next-web
 
 docker run -d -p 3000:3000 \
    -e OPENAI_API_KEY="sk-xxxx" \
    -e CODE="your-password" \
    yidadaa/chatgpt-next-web
-```
+您可以在代理后面启动服务：
 
-You can start service behind a proxy:
-
-```shell
 docker run -d -p 3000:3000 \
    -e OPENAI_API_KEY="sk-xxxx" \
    -e CODE="your-password" \
    -e PROXY_URL="http://localhost:7890" \
    yidadaa/chatgpt-next-web
-```
-
-设置了   model-config.tsx   settings.tsx   sidebar.tsx
+设置了model-config.tsx settings.tsx sidebar.tsx
