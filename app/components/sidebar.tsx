@@ -28,9 +28,13 @@ import { useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showToast } from "./ui-lib";
 
+
+
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
 });
+
+ 
 
 function useDragSideBar() {
   const limit = (x: number) => Math.min(MAX_SIDEBAR_WIDTH, x);
@@ -117,7 +121,7 @@ export function SideBar(props: { className?: string }) {
           icon={<PluginIcon />}
           text={shouldNarrow ? undefined : Locale.Plugin.Name}
           className={styles["sidebar-bar-button"]}
-          onClick={() => showToast(Locale.WIP)}
+          onClick={() => navigate(Path.Login, { state: { fromHome: true } })}
           shadow
         />
       </div>

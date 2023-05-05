@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, HTMLProps, useRef } from "react";
 
-import styles from "./settings.module.scss";
+import styles from "./login.module.scss";
 
 import ResetIcon from "../icons/reload.svg";
 import AddIcon from "../icons/add.svg";
@@ -9,6 +9,8 @@ import CopyIcon from "../icons/copy.svg";
 import ClearIcon from "../icons/clear.svg";
 import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
+import Nati from "../icons/nati.svg";
+
 import { Input, List, ListItem, Modal, PasswordInput, Popover } from "./ui-lib";
 import { ModelConfigList } from "./model-config";
 
@@ -31,6 +33,8 @@ import { ErrorBoundary } from "./error";
 import { InputRange } from "./input-range";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarPicker } from "./emoji";
+import { NextRequest, NextResponse } from "next/server";
+import { login } from "../api/login";
 
 
 function EditPromptModal(props: { id: number; onClose: () => void }) {
@@ -197,7 +201,7 @@ function formatVersionDate(t: string) {
   ].join("");
 }
 
-export function Settings() {
+export function Login() {
   const navigate = useNavigate();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const config = useAppConfig();
@@ -210,6 +214,19 @@ export function Settings() {
   const currentVersion = formatVersionDate(updateStore.version);
   const remoteId = formatVersionDate(updateStore.remoteVersion);
   const hasNewVersion = currentVersion !== remoteId;
+
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  async function handleLogin() {
+    // req: NextRequest, res: NextResponse
+    // const response = await login(req, res);
+    // const data = await response.json();
+    // if (response.ok) {
+    //   console.log('登录成功');
+    // } else {
+    //   console.log('登录失败');
+    // }
+  }
 
   function checkUpdate(force = false) {
     setCheckingUpdate(true);
@@ -275,39 +292,13 @@ export function Settings() {
   return (
     <ErrorBoundary>
       <div className="window-header">
+        <div className="window-actions">
+          <div className={styles["window-action-block"]}></div>
+        </div>
         <div className="window-header-title">
-          <div className="window-header-main-title">
-            {Locale.Settings.Title}
-          </div>
-          <div className="window-header-sub-title">
-            {Locale.Settings.SubTitle}
-          </div>
+          <div className="window-header-main-title">登录</div>
         </div>
         <div className="window-actions">
-          <div className="window-action-button">
-            <IconButton
-              icon={<ClearIcon />}
-              onClick={() => {
-                if (confirm(Locale.Settings.Actions.ConfirmClearAll)) {
-                  chatStore.clearAllData();
-                }
-              }}
-              bordered
-              title={Locale.Settings.Actions.ClearAll}
-            />
-          </div>
-          <div className="window-action-button">
-            <IconButton
-              icon={<ResetIcon />}
-              onClick={() => {
-                if (confirm(Locale.Settings.Actions.ConfirmResetAll)) {
-                  resetConfig();
-                }
-              }}
-              bordered
-              title={Locale.Settings.Actions.ResetAll}
-            />
-          </div>
           <div className="window-action-button">
             <IconButton
               icon={<CloseIcon />}
@@ -319,210 +310,49 @@ export function Settings() {
         </div>
       </div>
       <div className={styles["settings"]}>
-        {/* <List>
-        <ListItem
-              title={Locale.Settings.AccessCode.Title}
-              subTitle={Locale.Settings.AccessCode.SubTitle}
-            >
-              <PasswordInput
-                value={accessStore.accessCode}
-                type="text"
-                placeholder={Locale.Settings.AccessCode.Placeholder}
-                onChange={(e) => {
-                  accessStore.updateCode(e.currentTarget.value);
-                }}
-              />
-            </ListItem>
-        </List> */}
-        <List>
-        <ModelConfigList
-            modelConfig={config.modelConfig}
-            updateConfig={(upater) => {
-              const modelConfig = { ...config.modelConfig };
-              upater(modelConfig);
-              config.update((config) => (config.modelConfig = modelConfig));
+        <div className={styles["Notice"]}>
+          <h4>公告</h4>
+          <div>
+            <Nati />
+          </div>
+          <div className={styles["span"]}>
+            请扫描上方二维码加入微信群了解更多信息，验证密码将会在群通知随机更新
+          </div>
+        </div>
+        {/* <div className={styles["window-container"]}>
+          账号：
+          <Input
+            value={accessStore.accessCode}
+            type="text"
+            placeholder="请输入您的账号"
+            className={styles["window-input"]}
+            onChange={(e) => {
+              accessStore.updateCode(e.currentTarget.value);
             }}
           />
-          <ListItem title={Locale.Settings.Avatar}>
-            <Popover
-              onClose={() => setShowEmojiPicker(false)}
-              content={
-                <AvatarPicker
-                  onEmojiClick={(avatar: string) => {
-                    updateConfig((config) => (config.avatar = avatar));
-                    setShowEmojiPicker(false);
-                  }}
-                />
-              }
-              open={showEmojiPicker}
-            >
-              <div
-                className={styles.avatar}
-                onClick={() => setShowEmojiPicker(true)}
-              >
-                <Avatar avatar={config.avatar} />
-              </div>
-            </Popover>
-          </ListItem>
-          <ListItem title={Locale.Settings.SendKey}>
-            <select
-              value={config.submitKey}
-              onChange={(e) => {
-                updateConfig(
-                  (config) =>
-                    (config.submitKey = e.target.value as any as SubmitKey),
-                );
-              }}
-            >
-              {Object.values(SubmitKey).map((v) => (
-                <option value={v} key={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </ListItem>
-
-          <ListItem title={Locale.Settings.Theme}>
-            <select
-              value={config.theme}
-              onChange={(e) => {
-                updateConfig(
-                  (config) => (config.theme = e.target.value as any as Theme),
-                );
-              }}
-            >
-              {Object.values(Theme).map((v) => (
-                <option value={v} key={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </ListItem>
-          <ListItem
-            title={Locale.Settings.Prompt.List}
-            subTitle={Locale.Settings.Prompt.ListCount(
-              builtinCount,
-              customCount,
-            )}
-          >
-            <IconButton
-              icon={<EditIcon />}
-              text={Locale.Settings.Prompt.Edit}
-              onClick={() => setShowPromptModal(true)}
-            />
-          </ListItem>
-          {/* <ListItem
-            title={Locale.Settings.Update.Version(currentVersion ?? "unknown")}
-            subTitle={
-              checkingUpdate
-                ? Locale.Settings.Update.IsChecking
-                : hasNewVersion
-                ? Locale.Settings.Update.FoundUpdate(remoteId ?? "ERROR")
-                : Locale.Settings.Update.IsLatest
-            }
-          >
-            {checkingUpdate ? (
-              <div />
-            ) : hasNewVersion ? (
-              <Link href={UPDATE_URL} target="_blank" className="link">
-                {Locale.Settings.Update.GoToUpdate}
-              </Link>
-            ) : (
-              <IconButton
-                icon={<ResetIcon></ResetIcon>}
-                text={Locale.Settings.Update.CheckUpdate}
-                onClick={() => checkUpdate(true)}
-              />
-            )}
-          </ListItem>
-          <ListItem title={Locale.Settings.Lang.Name}>
-            <select
-              value={getLang()}
-              onChange={(e) => {
-                changeLang(e.target.value as any);
-              }}
-            >
-              {AllLangs.map((lang) => (
-                <option value={lang} key={lang}>
-                  {Locale.Settings.Lang.Options[lang]}
-                </option>
-              ))}
-            </select>
-          </ListItem>
-
-          <ListItem
-            title={Locale.Settings.FontSize.Title}
-            subTitle={Locale.Settings.FontSize.SubTitle}
-          >
-            <InputRange
-              title={`${config.fontSize ?? 14}px`}
-              value={config.fontSize}
-              min="12"
-              max="18"
-              step="1"
-              onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.fontSize = Number.parseInt(e.currentTarget.value)),
-                )
-              }
-            ></InputRange>
-          </ListItem>
-
-          <ListItem
-            title={Locale.Settings.SendPreviewBubble.Title}
-            subTitle={Locale.Settings.SendPreviewBubble.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={config.sendPreviewBubble}
-              onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.sendPreviewBubble = e.currentTarget.checked),
-                )
-              }
-            ></input>
-          </ListItem>
-
-          <ListItem
-            title={Locale.Settings.Mask.Title}
-            subTitle={Locale.Settings.Mask.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={!config.dontShowMaskSplashScreen}
-              onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.dontShowMaskSplashScreen =
-                      !e.currentTarget.checked),
-                )
-              }
-            ></input>
-          </ListItem> 
-          <ListItem
-            title={Locale.Settings.Prompt.Disable.Title}
-            subTitle={Locale.Settings.Prompt.Disable.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={config.disablePromptHint}
-              onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.disablePromptHint = e.currentTarget.checked),
-                )
-              }
-            ></input>
-          </ListItem>
-          */}
-        </List>
-
-        {shouldShowPromptModal && (
-          <UserPromptModal onClose={() => setShowPromptModal(false)} />
-        )}
+        </div> */}
+        <div className={styles["window-container"]}>
+          密码：
+          <PasswordInput
+            value={accessStore.accessCode}
+            type="text"
+            placeholder={Locale.Settings.AccessCode.Placeholder}
+            onChange={(e) => {
+              accessStore.updateCode(e.currentTarget.value);
+            }}
+          />
+        </div>
       </div>
+      {/* <div className={styles["sidebar-header-bar"]}>
+        <IconButton
+          text={"登录"}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => {
+            handleLogin();
+          }}
+          shadow
+        />
+      </div> */}
     </ErrorBoundary>
   );
 }

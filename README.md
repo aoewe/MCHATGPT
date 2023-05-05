@@ -44,4 +44,5 @@ docker run -d -p 3000:3000 \
    -e CODE="your-password" \
    -e PROXY_URL="http://localhost:7890" \
    yidadaa/chatgpt-next-web
-设置了model-config.tsx settings.tsx sidebar.tsx
+设置了model-config.tsx settings.tsx 
+sidebar.tsx  为左边上下按钮
