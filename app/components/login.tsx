@@ -316,7 +316,7 @@ export function Login() {
             <Nati />
           </div>
           <div className={styles["span"]}>
-            请扫描上方二维码加入微信群了解更多信息，验证密码将会在群通知随机更新
+          二维码过期为5月22日,请扫描上方二维码加入微信群了解更多信息，验证密码将会在群通知随机更新
           </div>
         </div>
         {/* <div className={styles["window-container"]}>
