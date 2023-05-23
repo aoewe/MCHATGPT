@@ -34,6 +34,10 @@ const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
 });
 
+const PanintList = dynamic(async () => (await import("./Painting-list")).PanintList, {
+  loading: () => null,
+});
+
  
 
 function useDragSideBar() {

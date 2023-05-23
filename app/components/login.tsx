@@ -316,7 +316,7 @@ export function Login() {
             <Nati />
           </div>
           <div className={styles["span"]}>
-          二维码过期为5月22日,请扫描上方二维码加入微信群了解更多信息，验证密码将会在群通知随机更新
+          二维码过期为5月30日,请扫描上方二维码加入微信群了解更多信息，验证密码将会在群通知随机更新
           </div>
         </div>
         {/* <div className={styles["window-container"]}>
@@ -343,6 +343,12 @@ export function Login() {
           />
         </div>
       </div>
+      <IconButton
+          text={'确定'}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => navigate(Path.Home)}
+          shadow
+        />
       {/* <div className={styles["sidebar-header-bar"]}>
         <IconButton
           text={"登录"}
