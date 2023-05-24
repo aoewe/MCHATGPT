@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 
 import styles from "./home.module.scss";
-
+import { showAnnouncement } from "./use-notice";
 import { IconButton } from "./button";
 import SettingsIcon from "../icons/settings.svg";
-import GithubIcon from "../icons/github.svg";
+import AnnouncementIcon from "../icons/announcement.svg";
 import ChatGptIcon from "../icons/chatgpt.svg";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
@@ -13,7 +13,7 @@ import PluginIcon from "../icons/plugin.svg";
 
 import Locale from "../locales";
 
-import { useAppConfig, useChatStore } from "../store";
+import { useAppConfig,useNoticeStore, useChatStore } from "../store";
 
 import {
   MAX_SIDEBAR_WIDTH,
@@ -33,6 +33,7 @@ import { showToast } from "./ui-lib";
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
 });
+
 
 const PanintList = dynamic(async () => (await import("./Painting-list")).PanintList, {
   loading: () => null,
@@ -75,6 +76,7 @@ function useDragSideBar() {
     !isMobileScreen && config.sidebarWidth < MIN_SIDEBAR_WIDTH;
 
   useEffect(() => {
+    showAnnouncement();
     const barWidth = shouldNarrow
       ? NARROW_SIDEBAR_WIDTH
       : limit(config.sidebarWidth ?? 300);
@@ -94,6 +96,7 @@ export function SideBar(props: { className?: string }) {
   // drag side bar
   const { onDragMouseDown, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
+
 
   const config = useAppConfig();
 
@@ -155,14 +158,16 @@ export function SideBar(props: { className?: string }) {
           </div>
           <div className={styles["sidebar-action"]}>
             <Link to={Path.Settings}>
-              <IconButton icon={<SettingsIcon />} shadow />
+              <IconButton icon={<SettingsIcon />}/>
             </Link>
           </div>
-          {/* <div className={styles["sidebar-action"]}>
-            <a href={REPO_URL} target="_blank">
-              <IconButton icon={<GithubIcon />} shadow />
-            </a>
-          </div> */}
+          <div className={styles["sidebar-action"]}>
+              <IconButton
+                text={'通知公告'}
+                icon={<AnnouncementIcon />}
+                onClick={() => showAnnouncement()}
+              />
+            </div>
         </div>
         <div>
           <IconButton
@@ -188,3 +193,4 @@ export function SideBar(props: { className?: string }) {
     </div>
   );
 }
+
