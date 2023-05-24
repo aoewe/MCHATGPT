@@ -9,11 +9,11 @@ export const RUNTIME_CONFIG_DOM = "danger-runtime-config";
 
 export enum Path {
   Home = "/MP_verify_TPKMzYuxpSfZ7xRT.txt",
-  Chat = "/chat",
-  Settings = "/settings",
-  Login= "/login",
-  NewChat = "/new-chat",
-  Masks = "/masks",
+  Chat = "/chat/MP_verify_TPKMzYuxpSfZ7xRT.txt",
+  Settings = "/settings/MP_verify_TPKMzYuxpSfZ7xRT.txt",
+  Login= "/login/MP_verify_TPKMzYuxpSfZ7xRT.txt",
+  NewChat = "/new-chat/MP_verify_TPKMzYuxpSfZ7xRT.txt",
+  Masks = "/masks/MP_verify_TPKMzYuxpSfZ7xRT.txt",
 }
 
 export enum SlotID {
