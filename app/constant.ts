@@ -8,7 +8,7 @@ export const FETCH_TAG_URL = `https://api.github.com/repos/${OWNER}/${REPO}/tags
 export const RUNTIME_CONFIG_DOM = "danger-runtime-config";
 
 export enum Path {
-  Home = "/MP_verify_TPKMzYuxpSfZ7xRT.txt",
+  Home = "/",
   Chat = "/chat",
   Settings = "/settings",
   Login= "/login",
