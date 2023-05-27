@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo, HTMLProps, useRef ,FormEvent} from "react";
 
 import styles from "./login.module.scss";
-import { ResponseStatus } from "../api/typing.d";
+
+import { ResponseStatus,RegisterResponse } from "../api/typing.d";
 import ResetIcon from "../icons/reload.svg";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
@@ -11,6 +12,8 @@ import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
 
 
+
+const ifVerifyCode = !!process.env.NEXT_PUBLIC_EMAIL_SERVICE;
 import { Input, List, ListItem, Modal, PasswordInput, Popover ,ReturnButton,showToast } from "./ui-lib";
 import { ModelConfigList } from "./model-config";
 
@@ -36,7 +39,7 @@ import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarPicker } from "./emoji";
 import { NextRequest, NextResponse } from "next/server";
 import { login } from "../api/login";
-
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 
@@ -206,51 +209,65 @@ function formatVersionDate(t: string) {
   ].join("");
 }
 
-export function Login() {
+export function Register() {
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // 防止表单重复 提交
+  const [isSending, setIsSending] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [invitationCode, setInvitationCode] = useState(
+    searchParams.get("code") ?? ""
+  );
+
   const [submitting, setSubmitting] = useState(false);
+
   const [updateSessionToken, updateEmail] = useUserStore((state) => [
     state.updateSessionToken,
     state.updateEmail,
   ]);
 
-  const handleLogin = async (e: FormEvent) => {
+  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitting(true);
 
-    if (!email || !password) {
-      showToast("请输入邮箱密码");
+    if (!email || !password || !verificationCode) {
+      showToast(Locale.Index.NoneData);
       setSubmitting(false);
       return;
     }
 
-    const res = await (
-      await fetch("/api/user/login", {
+    const res = (await (
+      await fetch("/api/user/register", {
         cache: "no-store",
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), password }),
+        body: JSON.stringify({
+          email: email.trim(),
+          password,
+          code: verificationCode,
+          code_type: "email",
+          invitation_code: invitationCode.toLowerCase() ?? "",
+        }),
       })
-    ).json();
+    ).json()) as RegisterResponse;
 
     switch (res.status) {
       case ResponseStatus.Success: {
         updateSessionToken(res.sessionToken);
         updateEmail(email);
-        showToast(Locale.Index.Success(Locale.Index.Login));
-        navigate(Path.Home);
+        router.replace("/");
+        showToast(Locale.Index.Success(Locale.Index.Register));
         break;
       }
-      case ResponseStatus.notExist: {
-        showToast(Locale.Index.NotYetRegister);
+      case ResponseStatus.alreadyExisted: {
+        showToast(Locale.Index.DuplicateRegistration);
         break;
       }
-      case ResponseStatus.wrongPassword: {
-        showToast(Locale.Index.PasswordError);
+      case ResponseStatus.invalidCode: {
+        showToast(Locale.Index.CodeError);
         break;
       }
       default: {
@@ -258,9 +275,12 @@ export function Login() {
         break;
       }
     }
-
-    setSubmitting(false);
   };
+
+
+
+
+
 
   const navigate = useNavigate();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -295,10 +315,7 @@ export function Login() {
     );
   }
 
-  const usage = {
-    used: updateStore.used,
-    subscription: updateStore.subscription,
-  };
+
   const [loadingUsage, setLoadingUsage] = useState(false);
   function checkUsage(force = false) {
     setLoadingUsage(true);
@@ -340,6 +357,57 @@ export function Login() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleSendVerification = async () => {
+    setSubmitting(true);
+
+    if (!email) {
+      showToast("请输入邮箱");
+      setSubmitting(false);
+      return;
+    }
+
+    const res = await (
+      await fetch(
+        "/api/user/register/code?email=" + encodeURIComponent(email),
+        {
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+    ).json();
+
+    switch (res.status) {
+      case ResponseStatus.Success: {
+        switch (res.code_data.status) {
+          case 0:
+            showToast("验证码成功发送!");
+            setIsSending(true);
+            break;
+          case 1:
+            showToast(Locale.Index.DuplicateRegistration);
+            break;
+          case 2:
+            showToast("请求验证码过快，请稍后再试!");
+            break;
+          case 4:
+          default:
+            showToast(Locale.UnknownError);
+            break;
+        }
+        break;
+      }
+      case ResponseStatus.notExist: {
+        showToast(Locale.Index.EmailNonExistent);
+        break;
+      }
+      default: {
+        showToast(Locale.UnknownError);
+        break;
+      }
+    }
+    setSubmitting(false);
+  };
+
   return (
     <ErrorBoundary>
       <div className="window-header">
@@ -347,7 +415,7 @@ export function Login() {
           <div className={styles["window-action-block"]}></div>
         </div>
         <div className="window-header-title">
-          <div className="window-header-main-title">登录</div>
+          <div className="window-header-main-title">注册</div>
         </div>
         <div className="window-actions">
           <div className="window-action-button">
@@ -360,42 +428,76 @@ export function Login() {
           </div>
         </div>
       </div>
-      <div className={styles["login-form-container"]}>
-        <form className={styles["login-form"]} onSubmit={handleLogin}>
-          <ReturnButton onClick={() => navigate(Path.Register, { state: { fromHome: true } })} />
 
-          <h2 className={styles["login-form-title"]}></h2>
+      <div className={styles["login-form-container"]}>
+      <form className={styles["login-form"]} onSubmit={handleRegister}>
+        <ReturnButton onClick={() => router.push("/enter")} />
+
+        <h2 className={styles["login-form-title"]}></h2>
+        <div className={styles["login-form-input-group"]}>
+          <label htmlFor="email">账号</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className={styles["login-form-input-group"]}>
+          <label htmlFor="password">密码</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        {ifVerifyCode && (
           <div className={styles["login-form-input-group"]}>
-            <label htmlFor="email">账号</label>
+            <label htmlFor="email">邀请码</label>
+            <div className={styles["verification-code-container"]}>
+              <input
+                type="text"
+                id="verification-code"
+                maxLength={6}
+                pattern="\d{6}"
+                onChange={(e) => setVerificationCode(e.target.value)}
+              />
+              <button
+                className={styles["send-verification-button"]}
+                onClick={handleSendVerification}
+                disabled={submitting}
+              >
+                {isSending ? "Already Send to Email" : "Get Code"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className={styles["login-form-input-group"]}>
+          <label htmlFor="email">邀请码</label>
+          <div className={styles["verification-code-container"]}>
             <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              type="text"
+              id="invitation-code"
+              placeholder="可选"
+              value={invitationCode}
+              onChange={(e) => setInvitationCode(e.target.value)}
             />
           </div>
-          <div className={styles["login-form-input-group"]}>
-            <label htmlFor="password">密码</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className={styles["button-container"]}>
-            <button
-              className={styles["login-form-submit"]}
-              type="submit"
-              disabled={submitting}
-            >
-              登录
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+
+        <div className={styles["button-container"]}>
+          <button className={styles["login-form-submit"]} type="submit">
+            注册
+          </button>
+        </div>
+      </form>
+    </div>
+
     </ErrorBoundary>
   );
 }

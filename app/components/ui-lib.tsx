@@ -3,7 +3,8 @@ import LoadingIcon from "../icons/three-dots.svg";
 import CloseIcon from "../icons/close.svg";
 import EyeIcon from "../icons/eye.svg";
 import EyeOffIcon from "../icons/eye-off.svg";
-
+import ReturnIcon from "../icons/return.svg";
+import Locale from "../locales";
 import { createRoot } from "react-dom/client";
 import React, { HTMLProps, useEffect, useState } from "react";
 import { IconButton } from "./button";
@@ -241,6 +242,20 @@ export function PasswordInput(props: HTMLProps<HTMLInputElement>) {
         type={visible ? "text" : "password"}
         className={"password-input"}
       />
+    </div>
+  );
+}
+export function ReturnButton(props: { onClick: () => void }) {
+  return (
+    <div className={styles["return-button-wrapper"]}>
+      <div className={styles["return-button"]}>
+        <IconButton
+          icon={<ReturnIcon />}
+          onClick={props.onClick}
+          bordered
+          title={Locale.Settings.Actions.Close}
+        />
+      </div>
     </div>
   );
 }

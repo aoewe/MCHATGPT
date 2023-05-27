@@ -14,6 +14,8 @@ export enum Path {
   Login= "/login",
   NewChat = "/new-chat",
   Masks = "/masks",
+  Register = "/register",
+  Pricing = "/pricing"
 }
 
 export enum SlotID {

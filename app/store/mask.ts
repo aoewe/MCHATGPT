@@ -14,7 +14,7 @@ export type Mask = {
   modelConfig: ModelConfig;
   lang: Lang;
   builtin: boolean;
-};
+}; 
 
 export const DEFAULT_MASK_STATE = {
   masks: {} as Record<number, Mask>,
