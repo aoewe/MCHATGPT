@@ -3,13 +3,8 @@ import EN from "./en";
 
 export type { LocaleType } from "./cn";
 
-export const AllLangs = [
-  "en",
-  "cn",
-] as const;
-export type Lang = (typeof AllLangs)[number];
 
-
+export type Lang = "en" | "cn";
 
 const LANG_KEY = "lang";
 
@@ -56,7 +51,5 @@ export function changeLang(lang: Lang) {
   location.reload();
 }
 
-export default {
-  en: EN,
-  cn: CN,
-}[getLang()] as typeof CN;
+
+export default { en: EN, cn: CN }[getLang()];

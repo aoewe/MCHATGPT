@@ -26,7 +26,7 @@ import {
   useUserStore
 } from "../store";
 
-import Locale, { changeLang, getLang } from "../locales";
+import Locale from "../locales";
 import { copyToClipboard } from "../utils";
 import Link from "next/link";
 import { Path, UPDATE_URL } from "../constant";
