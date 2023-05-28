@@ -81,7 +81,7 @@ export function useSwitchTheme() {
       'meta[name="theme-color"]:not([media])',
     );
 
-    if (config.theme === "auto") {
+    if (config.theme === "light") {
       metaDescriptionDark?.setAttribute("content", "#151515");
       metaDescriptionLight?.setAttribute("content", "#fafafa");
     } else {

@@ -284,11 +284,11 @@ export function MaskPage() {
               <option key="all" value={Locale.Settings.Lang.All}>
                 {Locale.Settings.Lang.All}
               </option>
-              {AllLangs.map((lang) => (
+              {/* {AllLangs.map((lang) => (
                 <option value={lang} key={lang}>
                   {Locale.Settings.Lang.Options[lang]}
                 </option>
-              ))}
+              ))} */}
             </select>
 
             <IconButton
@@ -312,11 +312,11 @@ export function MaskPage() {
                   </div>
                   <div className={styles["mask-title"]}>
                     <div className={styles["mask-name"]}>{m.name}</div>
-                    <div className={styles["mask-info"] + " one-line"}>
+                    {/* <div className={styles["mask-info"] + " one-line"}>
                       {`${Locale.Mask.Item.Info(m.context.length)} / ${
                         Locale.Settings.Lang.Options[m.lang]
                       } / ${m.modelConfig.model}`}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className={styles["mask-actions"]}>

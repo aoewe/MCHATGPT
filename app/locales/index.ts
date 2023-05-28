@@ -3,13 +3,7 @@ import EN from "./en";
 
 export type { LocaleType } from "./cn";
 
-export const AllLangs = [
-  "en",
-  "cn",
-] as const;
-export type Lang = (typeof AllLangs)[number];
-
-
+type Lang = "en" | "cn";
 
 const LANG_KEY = "lang";
 
@@ -47,7 +41,7 @@ export function getLang(): Lang {
   if (lang.includes("zh") || lang.includes("cn")) {
     return "cn";
   } else {
-    return "cn";
+    return "en";
   }
 }
 
