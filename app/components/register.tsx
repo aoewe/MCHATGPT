@@ -431,8 +431,7 @@ export function Register() {
 
       <div className={styles["login-form-container"]}>
       <form className={styles["login-form"]} onSubmit={handleRegister}>
-        <ReturnButton onClick={() => router.push("/enter")} />
-
+        {/* <ReturnButton onClick={() => router.push("/enter")} /> */}
         <h2 className={styles["login-form-title"]}></h2>
         <div className={styles["login-form-input-group"]}>
           <label htmlFor="email">账号</label>
@@ -483,7 +482,7 @@ export function Register() {
             <input
               type="text"
               id="invitation-code"
-              placeholder="可选"
+              placeholder="选填"
               value={invitationCode}
               onChange={(e) => setInvitationCode(e.target.value)}
             />

@@ -99,7 +99,7 @@
     font-size: 14px;
     padding: 8px 12px !important;
     text-align: left;
-    box-sizing:inherit !important;
+    box-sizing: inherit !important;
     background: var(--white);
     color: var(--black);
     padding: 0 10px;
@@ -118,7 +118,7 @@
 
     input {
       flex: 1; // 使输入框尽可能占用可用空间
-      margin-right: 10px; // 添加输入框右侧的间距
+      margin-right: 60%; // 添加输入框右侧的间距
     }
 
     .send-verification-button {
@@ -155,8 +155,6 @@
   padding: 10px;
   text-align: center;
   width: 100%;
-
-  margin-right: 10px;
 
   &:hover {
     background-color: #1d93ab;
@@ -230,3 +228,8 @@
   }
 }
 
+.login-go-register {
+  margin-top: 20px;
+  text-align: end;
+  color: #bec1c1;
+}

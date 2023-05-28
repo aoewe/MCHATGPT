@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, HTMLProps, useRef ,FormEvent} from "react";
+import { useState, useEffect, useMemo, HTMLProps, useRef, FormEvent } from "react";
 
 import styles from "./login.module.scss";
 import { ResponseStatus } from "../api/typing.d";
@@ -11,7 +11,8 @@ import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
 
 
-import { Input, List, ListItem, Modal, PasswordInput, Popover ,ReturnButton,showToast } from "./ui-lib";
+
+import { Input, List, ListItem, Modal, PasswordInput, Popover, ReturnButton, showToast } from "./ui-lib";
 import { ModelConfigList } from "./model-config";
 
 import { IconButton } from "./button";
@@ -362,8 +363,6 @@ export function Login() {
       </div>
       <div className={styles["login-form-container"]}>
         <form className={styles["login-form"]} onSubmit={handleLogin}>
-          <ReturnButton onClick={() => navigate(Path.Register, { state: { fromHome: true } })} />
-
           <h2 className={styles["login-form-title"]}></h2>
           <div className={styles["login-form-input-group"]}>
             <label htmlFor="email">账号</label>
@@ -394,6 +393,7 @@ export function Login() {
               登录
             </button>
           </div>
+          <div className={styles["login-go-register"]} onClick={() => navigate(Path.Register, { state: { fromHome: true } })}>前往注册</div>
         </form>
       </div>
     </ErrorBoundary>

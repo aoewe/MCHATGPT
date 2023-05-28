@@ -145,14 +145,14 @@ export function Pricing() {
           <div className={styles["window-header-sub-title"]}>解锁更多权益</div>
         </div>
         <div className={styles["window-actions"]}>
-          <div className={styles["window-action-button"]}>
+          {/* <div className={styles["window-action-button"]}>
             <IconButton
               icon={<CloseIcon />}
               onClick={() => navigate(Path.Home)}
               bordered
               title={Locale.Settings.Actions.Close}
             />
-          </div>
+          </div> */}
         </div>
       </div>
 

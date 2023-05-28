@@ -10,6 +10,7 @@ import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
 import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
+import AutoIcon from "../icons/auto.svg";
 
 import Locale from "../locales";
 
@@ -118,10 +119,11 @@ export function SideBar(props: { className?: string }) {
 
       <div className={styles["sidebar-header-bar"]}>
         <IconButton
-          icon={<MaskIcon />}
+          icon={<AutoIcon />}
           text={shouldNarrow ? undefined : Locale.Mask.Name}
           className={styles["sidebar-bar-button"]}
-          onClick={() => navigate(Path.Pricing, { state: { fromHome: true } })}
+          onClick={() => showToast(Locale.WIP)}
+          // onClick={() => navigate(Path.Pricing, { state: { fromHome: true } })}
           shadow
         />
         <IconButton

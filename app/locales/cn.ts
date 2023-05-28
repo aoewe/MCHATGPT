@@ -212,7 +212,7 @@ const cn = {
     Name: "登录",
   },
   Mask: {
-    Name: "角色",
+    Name: "个人中心",
     Page: {
       Title: "预设角色角色",
       SubTitle: (count: number) => `${count} 个预设角色定义`,

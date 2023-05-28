@@ -326,7 +326,7 @@ export function ChatActions(props: {
   // switch themes
   const theme = config.theme;
   function nextTheme() {
-    const themes = [Theme.Auto, Theme.Light, Theme.Dark];
+    const themes = [Theme.Light, Theme.Dark];
     const themeIndex = themes.indexOf(theme);
     const nextIndex = (themeIndex + 1) % themes.length;
     const nextTheme = themes[nextIndex];
@@ -364,33 +364,44 @@ export function ChatActions(props: {
         </div>
       )}
 
-      <div
-        className={`${chatStyle["chat-input-action"]} clickable`}
-        onClick={nextTheme}
-      >
-        {theme === Theme.Auto ? (
-          <AutoIcon />
-        ) : theme === Theme.Light ? (
-          <LightIcon />
-        ) : theme === Theme.Dark ? (
-          <DarkIcon />
+      <div>
+        {theme === Theme.Light ? (
+          <IconButton
+          icon={<LightIcon />}
+          text={"白色主题"}
+          className={`${chatStyle["chat-input-action"]} clickable`}
+          onClick={nextTheme}
+          shadow
+        />
+        ): theme === Theme.Dark ? (
+          <IconButton
+          icon={<DarkIcon />}
+          text={"黑色主题"}
+          className={`${chatStyle["chat-input-action"]} clickable`}
+          onClick={nextTheme}
+          shadow
+        />
         ) : null}
       </div>
-
-      <div
-        className={`${chatStyle["chat-input-action"]} clickable`}
-        onClick={props.showPromptHints}
-      >
-        <PromptIcon />
+      <div>
+        <IconButton
+          icon={<PromptIcon />}
+          text={"预设话题"}
+          className={`${chatStyle["chat-input-action"]} clickable`}
+          onClick={props.showPromptHints}
+          shadow
+        />
       </div>
-
-      <div
-        className={`${chatStyle["chat-input-action"]} clickable`}
-        onClick={() => {
-          navigate(Path.Masks);
-        }}
-      >
-        <MaskIcon />
+      <div>
+        <IconButton
+          icon={<MaskIcon />}
+          text={"预设角色"}
+          className={`${chatStyle["chat-input-action"]} clickable`}
+          onClick={() => {
+            navigate(Path.Masks);
+          }}
+          shadow
+        />
       </div>
     </div>
   );
@@ -581,27 +592,27 @@ export function Chat() {
     .concat(
       isLoading
         ? [
-            {
-              ...createMessage({
-                role: "assistant",
-                content: "……",
-              }),
-              preview: true,
-            },
-          ]
+          {
+            ...createMessage({
+              role: "assistant",
+              content: "……",
+            }),
+            preview: true,
+          },
+        ]
         : [],
     )
     .concat(
       userInput.length > 0 && config.sendPreviewBubble
         ? [
-            {
-              ...createMessage({
-                role: "user",
-                content: userInput,
-              }),
-              preview: true,
-            },
-          ]
+          {
+            ...createMessage({
+              role: "user",
+              content: userInput,
+            }),
+            preview: true,
+          },
+        ]
         : [],
     );
 
