@@ -9,7 +9,7 @@ import CopyIcon from "../icons/copy.svg";
 import ClearIcon from "../icons/clear.svg";
 import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
-
+import fetch from '../api/request';
 
 
 import { Input, List, ListItem, Modal, PasswordInput, Popover, ReturnButton, showToast } from "./ui-lib";
@@ -36,7 +36,7 @@ import { InputRange } from "./input-range";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarPicker } from "./emoji";
 import { NextRequest, NextResponse } from "next/server";
-import { login } from "../api/login";
+
 
 
 
@@ -220,6 +220,8 @@ export function Login() {
   ]);
 
   const handleLogin = async (e: FormEvent) => {
+    console.log(e);
+    
     e.preventDefault();
     setSubmitting(true);
 
@@ -229,36 +231,42 @@ export function Login() {
       return;
     }
 
-    const res = await (
-      await fetch("/api/user/login", {
-        cache: "no-store",
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), password }),
-      })
-    ).json();
+    const loginData = {
+      username: email,
+      password: password
+    };
+    
+    
 
-    switch (res.status) {
-      case ResponseStatus.Success: {
-        updateSessionToken(res.sessionToken);
-        updateEmail(email);
-        showToast(Locale.Index.Success(Locale.Index.Login));
-        navigate(Path.Home);
-        break;
-      }
-      case ResponseStatus.notExist: {
-        showToast(Locale.Index.NotYetRegister);
-        break;
-      }
-      case ResponseStatus.wrongPassword: {
-        showToast(Locale.Index.PasswordError);
-        break;
-      }
-      default: {
-        showToast(Locale.UnknownError);
-        break;
-      }
-    }
+    const res = fetch.login(loginData)
+    .then((response) => {
+      // 处理登录成功后的响应数据
+    })
+    .catch((error) => {
+      // 处理错误信息
+    });
+
+    // switch (res.status) {
+    //   case ResponseStatus.Success: {
+    //     updateSessionToken(res.sessionToken);
+    //     updateEmail(email);
+    //     showToast(Locale.Index.Success(Locale.Index.Login));
+    //     navigate(Path.Home);
+    //     break;
+    //   }
+    //   case ResponseStatus.notExist: {
+    //     showToast(Locale.Index.NotYetRegister);
+    //     break;
+    //   }
+    //   case ResponseStatus.wrongPassword: {
+    //     showToast(Locale.Index.PasswordError);
+    //     break;
+    //   }
+    //   default: {
+    //     showToast(Locale.UnknownError);
+    //     break;
+    //   }
+    // }
 
     setSubmitting(false);
   };
@@ -367,7 +375,7 @@ export function Login() {
           <div className={styles["login-form-input-group"]}>
             <label htmlFor="email">账号</label>
             <input
-              type="email"
+              type="text"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

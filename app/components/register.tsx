@@ -38,7 +38,7 @@ import { InputRange } from "./input-range";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarPicker } from "./emoji";
 import { NextRequest, NextResponse } from "next/server";
-import { login } from "../api/login";
+import fetch from '../api/request';
 import { useRouter, useSearchParams } from "next/navigation";
 
 
@@ -233,48 +233,53 @@ export function Register() {
   const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email || !password || !verificationCode) {
+    // if (!email || !password || !verificationCode) {
+    //   showToast(Locale.Index.NoneData);
+    //   setSubmitting(false);
+    //   return;
+    // }
+    if (!email || !password) {
       showToast(Locale.Index.NoneData);
       setSubmitting(false);
       return;
     }
 
-    const res = (await (
-      await fetch("/api/user/register", {
-        cache: "no-store",
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email.trim(),
-          password,
-          code: verificationCode,
-          code_type: "email",
-          invitation_code: invitationCode.toLowerCase() ?? "",
-        }),
-      })
-    ).json()) as RegisterResponse;
+    const registerData = {
+      username: email,
+      password: password
+    };
+    
+    
 
-    switch (res.status) {
-      case ResponseStatus.Success: {
-        updateSessionToken(res.sessionToken);
-        updateEmail(email);
-        router.replace("/");
-        showToast(Locale.Index.Success(Locale.Index.Register));
-        break;
-      }
-      case ResponseStatus.alreadyExisted: {
-        showToast(Locale.Index.DuplicateRegistration);
-        break;
-      }
-      case ResponseStatus.invalidCode: {
-        showToast(Locale.Index.CodeError);
-        break;
-      }
-      default: {
-        showToast(Locale.UnknownError);
-        break;
-      }
-    }
+    const res = fetch.register(registerData)
+    .then((response) => {
+      // 处理登录成功后的响应数据
+    })
+    .catch((error) => {
+      // 处理错误信息
+    });
+
+    // switch (res.status) {
+    //   case ResponseStatus.Success: {
+    //     updateSessionToken(res.sessionToken);
+    //     updateEmail(email);
+    //     router.replace("/");
+    //     showToast(Locale.Index.Success(Locale.Index.Register));
+    //     break;
+    //   }
+    //   case ResponseStatus.alreadyExisted: {
+    //     showToast(Locale.Index.DuplicateRegistration);
+    //     break;
+    //   }
+    //   case ResponseStatus.invalidCode: {
+    //     showToast(Locale.Index.CodeError);
+    //     break;
+    //   }
+    //   default: {
+    //     showToast(Locale.UnknownError);
+    //     break;
+    //   }
+    // }
   };
 
 
@@ -357,56 +362,56 @@ export function Register() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSendVerification = async () => {
-    setSubmitting(true);
+  // const handleSendVerification = async () => {
+  //   setSubmitting(true);
 
-    if (!email) {
-      showToast("请输入邮箱");
-      setSubmitting(false);
-      return;
-    }
+  //   if (!email) {
+  //     showToast("请输入邮箱");
+  //     setSubmitting(false);
+  //     return;
+  //   }
 
-    const res = await (
-      await fetch(
-        "/api/user/register/code?email=" + encodeURIComponent(email),
-        {
-          cache: "no-store",
-          headers: { "Content-Type": "application/json" },
-        }
-      )
-    ).json();
+  //   const res = await (
+  //     await fetch(
+  //       "/api/user/register/code?email=" + encodeURIComponent(email),
+  //       {
+  //         cache: "no-store",
+  //         headers: { "Content-Type": "application/json" },
+  //       }
+  //     )
+  //   ).json();
 
-    switch (res.status) {
-      case ResponseStatus.Success: {
-        switch (res.code_data.status) {
-          case 0:
-            showToast("验证码成功发送!");
-            setIsSending(true);
-            break;
-          case 1:
-            showToast(Locale.Index.DuplicateRegistration);
-            break;
-          case 2:
-            showToast("请求验证码过快，请稍后再试!");
-            break;
-          case 4:
-          default:
-            showToast(Locale.UnknownError);
-            break;
-        }
-        break;
-      }
-      case ResponseStatus.notExist: {
-        showToast(Locale.Index.EmailNonExistent);
-        break;
-      }
-      default: {
-        showToast(Locale.UnknownError);
-        break;
-      }
-    }
-    setSubmitting(false);
-  };
+  //   switch (res.status) {
+  //     case ResponseStatus.Success: {
+  //       switch (res.code_data.status) {
+  //         case 0:
+  //           showToast("验证码成功发送!");
+  //           setIsSending(true);
+  //           break;
+  //         case 1:
+  //           showToast(Locale.Index.DuplicateRegistration);
+  //           break;
+  //         case 2:
+  //           showToast("请求验证码过快，请稍后再试!");
+  //           break;
+  //         case 4:
+  //         default:
+  //           showToast(Locale.UnknownError);
+  //           break;
+  //       }
+  //       break;
+  //     }
+  //     case ResponseStatus.notExist: {
+  //       showToast(Locale.Index.EmailNonExistent);
+  //       break;
+  //     }
+  //     default: {
+  //       showToast(Locale.UnknownError);
+  //       break;
+  //     }
+  //   }
+  //   setSubmitting(false);
+  // };
 
   return (
     <ErrorBoundary>
@@ -436,7 +441,7 @@ export function Register() {
         <div className={styles["login-form-input-group"]}>
           <label htmlFor="email">账号</label>
           <input
-            type="email"
+            type="text"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -467,7 +472,7 @@ export function Register() {
               />
               <button
                 className={styles["send-verification-button"]}
-                onClick={handleSendVerification}
+                // onClick={handleSendVerification}
                 disabled={submitting}
               >
                 {isSending ? "Already Send to Email" : "Get Code"}
