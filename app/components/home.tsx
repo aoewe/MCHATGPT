@@ -14,6 +14,7 @@ import { getCSSVar, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { Path, SlotID } from "../constant";
 import { ErrorBoundary } from "./error";
+import fetch from '../api/request';
 
 import {
   HashRouter as Router,

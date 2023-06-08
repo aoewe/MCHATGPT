@@ -53,7 +53,7 @@ import { IconButton } from "./button";
 import styles from "./home.module.scss";
 import chatStyle from "./chat.module.scss";
 
-import { ListItem, Modal, showModal } from "./ui-lib";
+import { ListItem, Modal, showModal, showToast } from "./ui-lib";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Path } from "../constant";
 import { Avatar } from "./emoji";
@@ -63,10 +63,17 @@ import {
   DEFAULT_MASK_ID,
   useMaskStore,
 } from "../store/mask";
+import fetch from '../api/request';
+
+const CODE = localStorage.getItem('CODE')
+console.log(CODE);
+
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
 });
+
+
 
 function exportMessages(messages: Message[], topic: string) {
   const mdText =
@@ -195,6 +202,7 @@ function PromptToast(props: {
 }
 
 function useSubmitHandler() {
+
   const config = useAppConfig();
   const submitKey = config.submitKey;
 
@@ -231,6 +239,8 @@ export function PromptHints(props: {
   useEffect(() => {
     setSelectIndex(0);
   }, [props.prompts.length]);
+
+
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -292,6 +302,7 @@ export function PromptHints(props: {
 
 function useScrollToBottom() {
   // for auto-scroll
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const [autoScroll, setAutoScroll] = useState(true);
   const scrollToBottom = () => {
@@ -367,20 +378,20 @@ export function ChatActions(props: {
       <div>
         {theme === Theme.Light ? (
           <IconButton
-          icon={<LightIcon />}
-          text={"白色主题"}
-          className={`${chatStyle["chat-input-action"]} clickable`}
-          onClick={nextTheme}
-          shadow
-        />
-        ): theme === Theme.Dark ? (
+            icon={<LightIcon />}
+            text={"白色主题"}
+            className={`${chatStyle["chat-input-action"]} clickable`}
+            onClick={nextTheme}
+            shadow
+          />
+        ) : theme === Theme.Dark ? (
           <IconButton
-          icon={<DarkIcon />}
-          text={"黑色主题"}
-          className={`${chatStyle["chat-input-action"]} clickable`}
-          onClick={nextTheme}
-          shadow
-        />
+            icon={<DarkIcon />}
+            text={"黑色主题"}
+            className={`${chatStyle["chat-input-action"]} clickable`}
+            onClick={nextTheme}
+            shadow
+          />
         ) : null}
       </div>
       <div>
@@ -408,6 +419,22 @@ export function ChatActions(props: {
 }
 
 export function Chat() {
+
+  useEffect(() => {
+    const parame = {}
+    fetch.notice(parame)
+      .then((res) => {
+        console.log(res.code);
+        if (res.code === 0) {
+
+        }
+      })
+      .catch((error) => {
+
+      });
+  }, []);
+
+
   type RenderMessage = Message & { preview?: boolean };
 
   const chatStore = useChatStore();
@@ -580,7 +607,8 @@ export function Chat() {
     session.messages.at(0)?.content !== BOT_HELLO.content
   ) {
     const copiedHello = Object.assign({}, BOT_HELLO);
-    if (!accessStore.isAuthorized()) {
+
+    if (CODE != '0') {
       copiedHello.content = Locale.Error.Unauthorized;
     }
     context.push(copiedHello);

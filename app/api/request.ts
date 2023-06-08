@@ -1,16 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { api } from "./api";
 
-console.log(api);
 
 const request = (url: string, method: string, data: object): Promise<any> => {
-  const info = localStorage.getItem("USERINFO") || "is no data";
+  const token = localStorage.getItem("token");
   return fetch(url, {
     method,
     headers: {
       "Content-Type": "application/json",
-      //   uid: info,
-      //   token: info,
+      "Access-Control-Allow-Origin": "*",
+      "Authorization": `Bearer${token}`
     },
     body: JSON.stringify(data),
   })

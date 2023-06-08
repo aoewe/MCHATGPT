@@ -36,6 +36,7 @@ import { InputRange } from "./input-range";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarPicker } from "./emoji";
 import { NextRequest, NextResponse } from "next/server";
+import { log } from "console";
 
 
 
@@ -220,7 +221,6 @@ export function Login() {
   ]);
 
   const handleLogin = async (e: FormEvent) => {
-    console.log(e);
     
     e.preventDefault();
     setSubmitting(true);
@@ -238,12 +238,18 @@ export function Login() {
     
     
 
-    const res = fetch.login(loginData)
-    .then((response) => {
-      // 处理登录成功后的响应数据
+    fetch.login(loginData)
+    .then((res) => {
+      
+      if(res.code === 0){
+        console.log(res.access_token);
+      localStorage.setItem('token', res.access_token);
+      showToast("登录成功~");
+      navigate(Path.Home);
+      }
     })
     .catch((error) => {
-      // 处理错误信息
+      showToast("登录失败,请检看账号密码是否正确后重试");
     });
 
     // switch (res.status) {

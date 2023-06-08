@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo, HTMLProps, useRef ,FormEvent} from "react";
+import { useState, useEffect, useMemo, HTMLProps, useRef, FormEvent } from "react";
 
 import styles from "./login.module.scss";
 
-import { ResponseStatus,RegisterResponse } from "../api/typing.d";
+import { ResponseStatus, RegisterResponse } from "../api/typing.d";
 import ResetIcon from "../icons/reload.svg";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
@@ -10,11 +10,11 @@ import CopyIcon from "../icons/copy.svg";
 import ClearIcon from "../icons/clear.svg";
 import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
-
+import * as crypto from 'crypto';
 
 
 const ifVerifyCode = !!process.env.NEXT_PUBLIC_EMAIL_SERVICE;
-import { Input, List, ListItem, Modal, PasswordInput, Popover ,ReturnButton,showToast } from "./ui-lib";
+import { Input, List, ListItem, Modal, PasswordInput, Popover, ReturnButton, showToast } from "./ui-lib";
 import { ModelConfigList } from "./model-config";
 
 import { IconButton } from "./button";
@@ -40,9 +40,6 @@ import { Avatar, AvatarPicker } from "./emoji";
 import { NextRequest, NextResponse } from "next/server";
 import fetch from '../api/request';
 import { useRouter, useSearchParams } from "next/navigation";
-
-
-
 
 
 function EditPromptModal(props: { id: number; onClose: () => void }) {
@@ -243,21 +240,34 @@ export function Register() {
       setSubmitting(false);
       return;
     }
+    const regex = /^[a-zA-Z0-9]{6,}$/;
+    if (!regex.test(password)) {
+      showToast("账号必须为字母或数字,长度不能小于6");
+      return true;
+    } 
+  
+    const md5 = crypto.createHash('md5');
+    const encryptedPassword = md5.update(password).digest('hex');
+    console.log(encryptedPassword); // 打印加密后的密码
+
 
     const registerData = {
       username: email,
       password: password
     };
-    
-    
+
+
 
     const res = fetch.register(registerData)
-    .then((response) => {
-      // 处理登录成功后的响应数据
-    })
-    .catch((error) => {
-      // 处理错误信息
-    });
+      .then((response) => {
+        console.log(response);
+        
+
+      })
+      .catch((error) => {
+        console.log('111',error);
+
+      });
 
     // switch (res.status) {
     //   case ResponseStatus.Success: {
@@ -435,72 +445,72 @@ export function Register() {
       </div>
 
       <div className={styles["login-form-container"]}>
-      <form className={styles["login-form"]} onSubmit={handleRegister}>
-        {/* <ReturnButton onClick={() => router.push("/enter")} /> */}
-        <h2 className={styles["login-form-title"]}></h2>
-        <div className={styles["login-form-input-group"]}>
-          <label htmlFor="email">账号</label>
-          <input
-            type="text"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles["login-form-input-group"]}>
-          <label htmlFor="password">密码</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <form className={styles["login-form"]} onSubmit={handleRegister}>
+          {/* <ReturnButton onClick={() => router.push("/enter")} /> */}
+          <h2 className={styles["login-form-title"]}></h2>
+          <div className={styles["login-form-input-group"]}>
+            <label htmlFor="email">账号</label>
+            <input
+              type="text"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles["login-form-input-group"]}>
+            <label htmlFor="password">密码</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        {ifVerifyCode && (
+          {ifVerifyCode && (
+            <div className={styles["login-form-input-group"]}>
+              <label htmlFor="email">邀请码</label>
+              <div className={styles["verification-code-container"]}>
+                <input
+                  type="text"
+                  id="verification-code"
+                  maxLength={6}
+                  pattern="\d{6}"
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                />
+                <button
+                  className={styles["send-verification-button"]}
+                  // onClick={handleSendVerification}
+                  disabled={submitting}
+                >
+                  {isSending ? "Already Send to Email" : "Get Code"}
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className={styles["login-form-input-group"]}>
             <label htmlFor="email">邀请码</label>
             <div className={styles["verification-code-container"]}>
               <input
                 type="text"
-                id="verification-code"
-                maxLength={6}
-                pattern="\d{6}"
-                onChange={(e) => setVerificationCode(e.target.value)}
+                id="invitation-code"
+                placeholder="选填"
+                value={invitationCode}
+                onChange={(e) => setInvitationCode(e.target.value)}
               />
-              <button
-                className={styles["send-verification-button"]}
-                // onClick={handleSendVerification}
-                disabled={submitting}
-              >
-                {isSending ? "Already Send to Email" : "Get Code"}
-              </button>
             </div>
           </div>
-        )}
 
-        <div className={styles["login-form-input-group"]}>
-          <label htmlFor="email">邀请码</label>
-          <div className={styles["verification-code-container"]}>
-            <input
-              type="text"
-              id="invitation-code"
-              placeholder="选填"
-              value={invitationCode}
-              onChange={(e) => setInvitationCode(e.target.value)}
-            />
+          <div className={styles["button-container"]}>
+            <button className={styles["login-form-submit"]} type="submit">
+              注册
+            </button>
           </div>
-        </div>
-
-        <div className={styles["button-container"]}>
-          <button className={styles["login-form-submit"]} type="submit">
-            注册
-          </button>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
 
     </ErrorBoundary>
   );

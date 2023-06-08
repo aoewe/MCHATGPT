@@ -11,6 +11,7 @@ import CloseIcon from "../icons/close.svg";
 import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import AutoIcon from "../icons/auto.svg";
+import fetch from '../api/request';
 
 import Locale from "../locales";
 
