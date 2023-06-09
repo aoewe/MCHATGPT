@@ -233,3 +233,165 @@
   text-align: end;
   color: #bec1c1;
 }
+
+.user-profile-area {
+  margin: auto;
+  width: 360px;
+  border-right: 1px solid #e5e4e9;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: auto;
+}
+
+.user-profile-auto {
+  text-align: center;
+}
+
+.user-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+ }
+ 
+ .user-name {
+  font-weight: 600;
+  margin: 15px 0 8px;
+ }
+ 
+ .user-mail {
+  color: #999999;
+  font-size: 12px;
+  font-weight: 600;
+ }
+
+ .user-notification {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  svg {
+   width: 20px;
+   padding: 10px;
+   flex-shrink: 0;
+   border-radius: 50%;
+   overflow: visible;
+   background-color: #eaeefc;
+   color: #4d76fd;
+  }
+ }
+ 
+ .notify {
+  position: relative;
+  margin: 0px 10px;
+
+  &.alert {
+   position: relative;
+   &:before {
+    content: "2";
+    font-size: 9px;
+    font-weight: 700;
+    position: absolute;
+    background-color: #ff537b;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    top: -3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 0px;
+    color: #fff;
+   }
+   &:last-child:before {
+    content: "5";
+   }
+  }
+ }
+
+ .task-status {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.task-stat {
+  text-align: center;
+}
+
+.task-number {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.task-condition {
+  font-size: 12px;
+  color: #7a7e9d;
+  font-weight: 700;
+}
+
+.task-tasks {
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #a1a4b9;
+}
+
+.progress-status {
+  margin: 0px 60px;
+  text-align: right;
+  color: #7a7e9d;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.progress {
+  margin: 0px auto;
+  margin-top: 5px;
+  border-radius: 4px;
+  background-color: #e7e7ef;
+  height: 8px;
+  width: 70%;
+  overflow: hidden;
+  &-bar {
+   background-color: var(--button-color);
+   border-radius: 4px;
+   width: 35%;
+   height: 100%;
+   animation: progressAnimation 6s;
+   transition: 0.3s linear both;
+   transition-property: width, background-color;
+  }
+  &-status {
+   margin-top: 30px;
+   text-align: right;
+   color: var(--main-color);
+   font-size: 10px;
+   font-weight: 600;
+  }
+ }
+
+.side-wrapper {
+  padding: 25px 40px;
+}
+
+.project-title {
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+.team-member {
+  display: flex;
+  justify-content: space-between;
+}
+
+.member {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+

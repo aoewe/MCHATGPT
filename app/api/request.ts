@@ -9,7 +9,7 @@ const request = (url: string, method: string, data: object): Promise<any> => {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-      "Authorization": `Bearer${token}`
+      "Authorization": `Bearer ${token}`
     },
     body: JSON.stringify(data),
   })

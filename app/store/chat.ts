@@ -264,7 +264,7 @@ export const useChatStore = create<ChatStore>()(
         });
 
         // make request
-        console.log("[User Input] ", sendMessages);
+        // console.log("[User Input] ", sendMessages);
         requestChatStream(sendMessages, {
           onMessage(content, done) {
             // stream response
@@ -282,15 +282,11 @@ export const useChatStore = create<ChatStore>()(
             }
           },
           onError(error, statusCode) {
-            const isAborted = error.message.includes("aborted");
             if (statusCode === 401) {
-              botMessage.content = Locale.Error.Unauthorized;
-            } else if (!isAborted) {
-              botMessage.content += "\n\n" + Locale.Store.Error;
+              botMessage.content = Locale.UnknownError;
             }
             botMessage.streaming = false;
-            userMessage.isError = !isAborted;
-            botMessage.isError = !isAborted;
+
 
             set(() => ({}));
             ControllerPool.remove(sessionIndex, botMessage.id ?? messageIndex);

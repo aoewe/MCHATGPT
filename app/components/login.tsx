@@ -10,7 +10,7 @@ import ClearIcon from "../icons/clear.svg";
 import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
 import fetch from '../api/request';
-
+import * as crypto from 'crypto';
 
 import { Input, List, ListItem, Modal, PasswordInput, Popover, ReturnButton, showToast } from "./ui-lib";
 import { ModelConfigList } from "./model-config";
@@ -231,9 +231,19 @@ export function Login() {
       return;
     }
 
+    const regex = /^[a-zA-Z0-9]{6,}$/;
+    if (!regex.test(password)) {
+      showToast("账号必须为字母或数字,长度不能小于6");
+      return true;
+    } 
+  
+    const md5 = crypto.createHash('md5');
+    const encryptedPassword = md5.update(password).digest('hex');
+    console.log(encryptedPassword); // 打印加密后的密码
+
     const loginData = {
       username: email,
-      password: password
+      password: encryptedPassword
     };
     
     
@@ -242,7 +252,6 @@ export function Login() {
     .then((res) => {
       
       if(res.code === 0){
-        console.log(res.access_token);
       localStorage.setItem('token', res.access_token);
       showToast("登录成功~");
       navigate(Path.Home);

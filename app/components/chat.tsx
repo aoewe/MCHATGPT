@@ -63,17 +63,12 @@ import {
   DEFAULT_MASK_ID,
   useMaskStore,
 } from "../store/mask";
-import fetch from '../api/request';
-
-const CODE = localStorage.getItem('CODE')
-console.log(CODE);
-
+import fetch from "../api/request";
+import { log } from "console";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
 });
-
-
 
 function exportMessages(messages: Message[], topic: string) {
   const mdText =
@@ -202,7 +197,6 @@ function PromptToast(props: {
 }
 
 function useSubmitHandler() {
-
   const config = useAppConfig();
   const submitKey = config.submitKey;
 
@@ -239,8 +233,6 @@ export function PromptHints(props: {
   useEffect(() => {
     setSelectIndex(0);
   }, [props.prompts.length]);
-
-
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -419,21 +411,20 @@ export function ChatActions(props: {
 }
 
 export function Chat() {
-
+  let CODE: number = 0;
   useEffect(() => {
-    const parame = {}
-    fetch.notice(parame)
+    const parame = {};
+    fetch
+      .notice(parame)
       .then((res) => {
-        console.log(res.code);
-        if (res.code === 0) {
-
-        }
+        CODE = res.code;
+        localStorage.setItem("CODE", CODE.toString());
       })
       .catch((error) => {
-
+        CODE = -1;
+        localStorage.setItem("CODE", CODE.toString());
       });
   }, []);
-
 
   type RenderMessage = Message & { preview?: boolean };
 
@@ -607,8 +598,7 @@ export function Chat() {
     session.messages.at(0)?.content !== BOT_HELLO.content
   ) {
     const copiedHello = Object.assign({}, BOT_HELLO);
-
-    if (CODE != '0') {
+    if (CODE !== 0) {
       copiedHello.content = Locale.Error.Unauthorized;
     }
     context.push(copiedHello);
@@ -620,27 +610,27 @@ export function Chat() {
     .concat(
       isLoading
         ? [
-          {
-            ...createMessage({
-              role: "assistant",
-              content: "……",
-            }),
-            preview: true,
-          },
-        ]
+            {
+              ...createMessage({
+                role: "assistant",
+                content: "……",
+              }),
+              preview: true,
+            },
+          ]
         : [],
     )
     .concat(
       userInput.length > 0 && config.sendPreviewBubble
         ? [
-          {
-            ...createMessage({
-              role: "user",
-              content: userInput,
-            }),
-            preview: true,
-          },
-        ]
+            {
+              ...createMessage({
+                role: "user",
+                content: userInput,
+              }),
+              preview: true,
+            },
+          ]
         : [],
     );
 

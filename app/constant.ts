@@ -9,6 +9,7 @@ export const RUNTIME_CONFIG_DOM = "danger-runtime-config";
 
 export enum Path {
   Home = "/",
+  Center = "/center",
   Chat = "/chat",
   Settings = "/settings",
   Login= "/login",

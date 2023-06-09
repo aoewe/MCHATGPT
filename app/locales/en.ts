@@ -214,6 +214,9 @@ const en: LocaleType = {
   Plugin: {
     Name: "Plugin",
   },
+  UserInfo: {
+    Name:"UserInfo"
+  },
   Mask: {
     Name: "Mask",
     Page: {

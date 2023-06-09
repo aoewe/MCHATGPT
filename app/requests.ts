@@ -9,6 +9,7 @@ import {
 } from "./store";
 import { showToast } from "./components/ui-lib";
 
+
 const TIME_OUT_MS = 60000;
 
 const makeRequestParam = (
@@ -213,14 +214,11 @@ export async function requestChatStream(
 
       finish();
     } else if (res.status === 401) {
-      console.error("Unauthorized");
       options?.onError(new Error("Unauthorized"), res.status);
     } else {
-      console.error("Stream Error", res.body);
       options?.onError(new Error("Stream Error"), res.status);
     }
   } catch (err) {
-    console.error("NetWork Error", err);
     options?.onError(err as Error);
   }
 }

@@ -211,8 +211,11 @@ const cn = {
   Plugin: {
     Name: "登录",
   },
+  UserInfo: {
+    Name:"个人中心"
+  },
   Mask: {
-    Name: "个人中心",
+    Name: "模型商城",
     Page: {
       Title: "预设角色角色",
       SubTitle: (count: number) => `${count} 个预设角色定义`,

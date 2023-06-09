@@ -11,11 +11,11 @@ import CloseIcon from "../icons/close.svg";
 import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import AutoIcon from "../icons/auto.svg";
-import fetch from '../api/request';
+import fetch from "../api/request";
 
 import Locale from "../locales";
 
-import { useAppConfig,useNoticeStore, useChatStore } from "../store";
+import { useAppConfig, useNoticeStore, useChatStore } from "../store";
 
 import {
   MAX_SIDEBAR_WIDTH,
@@ -30,18 +30,16 @@ import { useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showToast } from "./ui-lib";
 
-
-
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
 });
 
-
-const PanintList = dynamic(async () => (await import("./Painting-list")).PanintList, {
-  loading: () => null,
-});
-
- 
+const PanintList = dynamic(
+  async () => (await import("./Painting-list")).PanintList,
+  {
+    loading: () => null,
+  },
+);
 
 function useDragSideBar() {
   const limit = (x: number) => Math.min(MAX_SIDEBAR_WIDTH, x);
@@ -94,11 +92,12 @@ function useDragSideBar() {
 
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
+  const CODE = localStorage.getItem("CODE");
+  console.log(CODE);
 
   // drag side bar
   const { onDragMouseDown, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
-
 
   const config = useAppConfig();
 
@@ -110,9 +109,7 @@ export function SideBar(props: { className?: string }) {
     >
       <div className={styles["sidebar-header"]}>
         <div className={styles["sidebar-title"]}>ChatGPT</div>
-        <div className={styles["sidebar-sub-title"]}>
-          Build your own AI assistant.
-        </div>
+        <div className={styles["sidebar-sub-title"]}>自己的人工智能助手.</div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <ChatGptIcon />
         </div>
@@ -129,9 +126,13 @@ export function SideBar(props: { className?: string }) {
         />
         <IconButton
           icon={<PluginIcon />}
-          text={shouldNarrow ? undefined : Locale.Plugin.Name}
+          text={CODE === '0' ? Locale.UserInfo.Name : Locale.Plugin.Name}
           className={styles["sidebar-bar-button"]}
-          onClick={() => navigate(Path.Login, { state: { fromHome: true } })}
+          onClick={() =>
+            navigate(CODE === '0' ? Path.Center : Path.Login, {
+              state: { fromHome: true },
+            })
+          }
           shadow
         />
       </div>
@@ -161,16 +162,16 @@ export function SideBar(props: { className?: string }) {
           </div>
           <div className={styles["sidebar-action"]}>
             <Link to={Path.Settings}>
-              <IconButton icon={<SettingsIcon />}/>
+              <IconButton icon={<SettingsIcon />} />
             </Link>
           </div>
           <div className={styles["sidebar-action"]}>
-              <IconButton
-                text={'通知公告'}
-                icon={<AnnouncementIcon />}
-                onClick={() => showAnnouncement()}
-              />
-            </div>
+            <IconButton
+              text={"通知公告"}
+              icon={<AnnouncementIcon />}
+              onClick={() => showAnnouncement()}
+            />
+          </div>
         </div>
         <div>
           <IconButton
@@ -196,4 +197,3 @@ export function SideBar(props: { className?: string }) {
     </div>
   );
 }
-

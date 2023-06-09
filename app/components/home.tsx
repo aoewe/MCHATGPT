@@ -42,6 +42,10 @@ const Login = dynamic(async () => (await import("./login")).Login, {
   loading: () => <Loading noLogo />,
 });
 
+const Center = dynamic(async () => (await import("./center")).Center, {
+  loading: () => <Loading noLogo />,
+});
+
 const Register = dynamic(async () => (await import("./register")).Register, {
   loading: () => <Loading noLogo />,
 });
@@ -125,7 +129,8 @@ function Screen() {
       <div className={styles["window-content"]} id={SlotID.AppBody}>
         <Routes>
           <Route path={Path.Home} element={<Chat />} />
-          <Route path={Path.Login} element={<Login />} />Pricing
+          <Route path={Path.Login} element={<Login />} />
+          <Route path={Path.Center} element={<Center />} />
           <Route path={Path.Register} element={<Register />} />
           <Route path={Path.Pricing} element={<Pricing />} />
           <Route path={Path.NewChat} element={<NewChat />} />

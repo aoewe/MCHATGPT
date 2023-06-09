@@ -253,7 +253,7 @@ export function Register() {
 
     const registerData = {
       username: email,
-      password: password
+      password: encryptedPassword
     };
 
 
