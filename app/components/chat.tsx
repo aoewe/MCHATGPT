@@ -64,7 +64,7 @@ import {
   useMaskStore,
 } from "../store/mask";
 import fetch from "../api/request";
-import { log } from "console";
+
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -421,7 +421,11 @@ export function Chat() {
         localStorage.setItem("CODE", CODE.toString());
       })
       .catch((error) => {
+       
+        
         CODE = -1;
+        console.log('====',CODE);
+        
         localStorage.setItem("CODE", CODE.toString());
       });
   }, []);
@@ -592,15 +596,20 @@ export function Chat() {
   const context: RenderMessage[] = session.mask.context.slice();
 
   const accessStore = useAccessStore();
-
+  const copiedHello = Object.assign({}, BOT_HELLO);
+  console.log('=======================================',CODE);
+  
+    if (CODE !== 0) {
+      copiedHello.content = Locale.Error.Unauthorized;
+    }
   if (
     context.length === 0 &&
     session.messages.at(0)?.content !== BOT_HELLO.content
   ) {
-    const copiedHello = Object.assign({}, BOT_HELLO);
-    if (CODE !== 0) {
-      copiedHello.content = Locale.Error.Unauthorized;
-    }
+    // const copiedHello = Object.assign({}, BOT_HELLO);
+    // if (CODE !== 0) {
+    //   copiedHello.content = Locale.Error.Unauthorized;
+    // }
     context.push(copiedHello);
   }
 
