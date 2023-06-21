@@ -31,7 +31,7 @@ export const DEFAULT_CONFIG = {
   modelConfig: {
     model: "gpt-3.5-turbo" as ModelType,
     temperature: 1,
-    max_tokens: 2000,
+    max_tokens: 16000,
     presence_penalty: 0,
     sendMemory: true,
     historyMessageCount: 4,
@@ -51,12 +51,9 @@ export type ModelConfig = ChatConfig["modelConfig"];
 const ENABLE_GPT4 = true;
 
 export const ALL_MODELS = [
+
   {
-    name: "gpt-4",
-    available: ENABLE_GPT4,
-  },
-  {
-    name: "DALL·E",
+    name: "gpt-3.5-turbo-16k",
     available: ENABLE_GPT4,
   },
   {
@@ -84,7 +81,7 @@ export function limitNumber(
 export function limitModel(name: string) {
   return ALL_MODELS.some((m) => m.name === name && m.available)
     ? name
-    : ALL_MODELS[2].name;
+    : ALL_MODELS[0].name;
 }
 
 export const ModalConfigValidator = {

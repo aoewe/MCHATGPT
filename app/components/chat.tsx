@@ -597,10 +597,8 @@ export function Chat() {
 
   const accessStore = useAccessStore();
   const copiedHello = Object.assign({}, BOT_HELLO);
-  console.log('=======================================',CODE);
   
   if (code !== 0) {
-    console.log('=======================================', code);
     copiedHello.content = Locale.Error.Unauthorized;
   }
   if (
