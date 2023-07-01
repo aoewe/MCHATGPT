@@ -25,8 +25,12 @@ const cn = {
   WIP: "该功能仍在开发中……",
   Error: {
     Unauthorized:
-      "现在是未授权状态，请点击左上方[登录](/#/Login)按钮输入访问密码。",
+      "请问有什么需要帮助的？在使用之前你可以在焦点话题，或角色预设设置你需要的角色",
   },
+  // Error: {
+  //   Unauthorized:
+  //     "现在是未授权状态，请点击左上方[登录](/#/Login)按钮输入访问密码。",
+  // },
   ChatItem: {
     ChatItemCount: (count: number) => `${count} 条对话`,
   },
