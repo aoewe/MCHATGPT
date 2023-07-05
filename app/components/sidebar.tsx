@@ -93,7 +93,6 @@ function useDragSideBar() {
 export function SideBar(props: { className?: string }) {
   const chatStore = useChatStore();
   const CODE = localStorage.getItem("CODE");
-  console.log(CODE);
 
   // drag side bar
   const { onDragMouseDown, shouldNarrow } = useDragSideBar();

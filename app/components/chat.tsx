@@ -411,21 +411,14 @@ export function ChatActions(props: {
 }
 
 export function Chat() {
-  const [code, setCode] = useState<number>(0);
   useEffect(() => {
     const parame = {};
     fetch
       .notice(parame)
       .then((res) => {
-        setCode(res.code);
-        console.log(code, '111111111');
-
         localStorage.setItem('CODE', res.code.toString());
       })
       .catch((error) => {
-        setCode(-1);
-        console.log(code, '222222222');
-
         localStorage.setItem('CODE', '-1');
       });
   }, []);
@@ -597,18 +590,10 @@ export function Chat() {
 
   const accessStore = useAccessStore();
   const copiedHello = Object.assign({}, BOT_HELLO);
-  
-  if (code !== 0) {
-    copiedHello.content = Locale.Error.Unauthorized;
-  }
   if (
     context.length === 0 &&
     session.messages.at(0)?.content !== BOT_HELLO.content
   ) {
-    // const copiedHello = Object.assign({}, BOT_HELLO);
-    // if (CODE !== 0) {
-    //   copiedHello.content = Locale.Error.Unauthorized;
-    // }
     context.push(copiedHello);
   }
 

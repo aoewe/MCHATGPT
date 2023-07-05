@@ -61,6 +61,8 @@ export const BOT_HELLO: Message = createMessage({
   content: Locale.Store.BotHello,
 });
 
+
+
 function createEmptySession(): ChatSession {
   return {
     id: Date.now() + Math.random(),
@@ -263,7 +265,13 @@ export const useChatStore = create<ChatStore>()(
           session.messages.push(botMessage);
         });
 
-        // make request
+
+          const CODE =  localStorage.getItem("CODE")
+          const num = Number(CODE)
+         if (num != 0) {
+          botMessage.content = Locale.Error.Unauthorized;
+         } else {
+          // make request
         // console.log("[User Input] ", sendMessages);
         requestChatStream(sendMessages, {
           onMessage(content, done) {
@@ -305,6 +313,7 @@ export const useChatStore = create<ChatStore>()(
           },
           modelConfig: { ...modelConfig },
         });
+         }
       },
 
       getMemoryPrompt() {

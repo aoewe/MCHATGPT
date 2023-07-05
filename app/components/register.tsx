@@ -259,14 +259,14 @@ export function Register() {
 
 
     const res = fetch.register(registerData)
-      .then((response) => {
-        console.log(response);
-        
-
+      .then((res) => {
+        if(res.code === 0){
+          showToast("注册成功~");
+          navigate(Path.Login);
+          }
       })
       .catch((error) => {
-        console.log('111',error);
-
+        showToast("失败了请联系管理员");
       });
 
     // switch (res.status) {
