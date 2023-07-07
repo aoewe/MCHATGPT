@@ -269,66 +269,59 @@ export const useChatStore = create<ChatStore>()(
 
         const parame = {};
         fetch.getinfonum(parame)
-          .then((res) => {        
-            if(res.data.balance <= 0){
-              localStorage.setItem('CODE', '-1');
+          .then((res) => {
+            if (res.data.balance <= 0) {
+              botMessage.content = Locale.Error.Unauthorize;
             } else {
-            localStorage.setItem('CODE', res.code.toString());
+              // make request
+              // console.log("[User Input] ", sendMessages);
+              requestChatStream(sendMessages, {
+                onMessage(content, done) {
+                  // stream response
+                  if (done) {
+                    botMessage.streaming = false;
+                    botMessage.content = content;
+                    get().onNewMessage(botMessage);
+                    ControllerPool.remove(
+                      sessionIndex,
+                      botMessage.id ?? messageIndex,
+                    );
+                  } else {
+                    botMessage.content = content;
+                    set(() => ({}));
+                  }
+                },
+                onError(error, statusCode) {
+                  const isAborted = error.message.includes("aborted");
+                  if (statusCode === 401) {
+                    botMessage.content = Locale.Error.Unauthorized;
+                  } else if (!isAborted) {
+                    botMessage.content += "\n\n" + Locale.Store.Error;
+                  }
+                  botMessage.streaming = false;
+                  userMessage.isError = !isAborted;
+                  botMessage.isError = !isAborted;
+
+                  set(() => ({}));
+                  ControllerPool.remove(sessionIndex, botMessage.id ?? messageIndex);
+                },
+                onController(controller) {
+                  // collect controller for stop/retry
+                  ControllerPool.addController(
+                    sessionIndex,
+                    botMessage.id ?? messageIndex,
+                    controller,
+                  );
+                },
+                modelConfig: { ...modelConfig },
+              });
+              localStorage.setItem('CODE', res.code.toString());
             }
           })
           .catch((error) => {
+            botMessage.content = Locale.Error.Unauthorized;
             localStorage.setItem('CODE', '-1');
           });
-
-        const CODE = localStorage.getItem("CODE")
-        const num = Number(CODE)
-        if (num != 0) {
-          botMessage.content = Locale.Error.Unauthorized;
-          showToast(Locale.UnknownError)
-        } else {
-          // make request
-          // console.log("[User Input] ", sendMessages);
-          requestChatStream(sendMessages, {
-            onMessage(content, done) {
-              // stream response
-              if (done) {
-                botMessage.streaming = false;
-                botMessage.content = content;
-                get().onNewMessage(botMessage);
-                ControllerPool.remove(
-                  sessionIndex,
-                  botMessage.id ?? messageIndex,
-                );
-              } else {
-                botMessage.content = content;
-                set(() => ({}));
-              }
-            },
-            onError(error, statusCode) {
-              const isAborted = error.message.includes("aborted");
-              if (statusCode === 401) {
-                botMessage.content = Locale.Error.Unauthorized;
-              } else if (!isAborted) {
-                botMessage.content += "\n\n" + Locale.Store.Error;
-              }
-              botMessage.streaming = false;
-              userMessage.isError = !isAborted;
-              botMessage.isError = !isAborted;
-
-              set(() => ({}));
-              ControllerPool.remove(sessionIndex, botMessage.id ?? messageIndex);
-            },
-            onController(controller) {
-              // collect controller for stop/retry
-              ControllerPool.addController(
-                sessionIndex,
-                botMessage.id ?? messageIndex,
-                controller,
-              );
-            },
-            modelConfig: { ...modelConfig },
-          });
-        }
       },
 
       getMemoryPrompt() {

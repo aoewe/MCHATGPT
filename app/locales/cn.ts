@@ -26,6 +26,8 @@ const cn = {
   Error: {
     Unauthorized:
       "现在是未授权状态，请点击左上方[登录](/#/Login)按钮输入访问密码。",
+      Unauthorize:
+      "我不想回答你的问题了，为什么？去问问管理员吧"
   },
   ChatItem: {
     ChatItemCount: (count: number) => `${count} 条对话`,
