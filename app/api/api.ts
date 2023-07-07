@@ -7,5 +7,7 @@ export const api = {
   test: `${BASE_URL}/api/test`,         //次数
   ip_status: `${BASE_URL}/api/ip_status`, //ip
   notice: `${BASE_URL}/api/notice`,   //公告
+  getinfonum: `${BASE_URL}/api/getinfonum`,   //公告
+  
 };
    

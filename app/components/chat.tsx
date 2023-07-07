@@ -63,7 +63,7 @@ import {
   DEFAULT_MASK_ID,
   useMaskStore,
 } from "../store/mask";
-import fetch from "../api/request";
+
 
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
@@ -411,18 +411,6 @@ export function ChatActions(props: {
 }
 
 export function Chat() {
-  useEffect(() => {
-    const parame = {};
-    fetch
-      .notice(parame)
-      .then((res) => {
-        localStorage.setItem('CODE', res.code.toString());
-      })
-      .catch((error) => {
-        localStorage.setItem('CODE', '-1');
-      });
-  }, []);
-
   type RenderMessage = Message & { preview?: boolean };
 
   const chatStore = useChatStore();

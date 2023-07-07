@@ -58,6 +58,10 @@ const notice = (data: object): Promise<any> => {
   return request(api.notice, "post", data);
 };
 
+const getinfonum = (data: object): Promise<any> => {
+  return request(api.getinfonum, "post", data);
+};
+
 export default {
   login,
   register,
@@ -65,4 +69,5 @@ export default {
   test,
   ip_status,
   notice,
+  getinfonum
 };
