@@ -27,6 +27,8 @@ const en: LocaleType = {
   Error: {
     Unauthorized:
       "Unauthorized access, please enter access code in settings page.",
+      Unauthorize:
+      "我不想回答你的问题了，为什么？去问问管理员吧"
   },
   ChatItem: {
     ChatItemCount: (count: number) => `${count} messages`,
