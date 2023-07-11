@@ -76,6 +76,17 @@ function useDragSideBar() {
     !isMobileScreen && config.sidebarWidth < MIN_SIDEBAR_WIDTH;
 
   useEffect(() => {
+    setTimeout(function () {
+      const parame = {};
+      fetch
+        .notice(parame)
+        .then((res) => {
+          localStorage.setItem("CODE", res.code.toString());
+        })
+        .catch((error) => {
+          localStorage.setItem("CODE", "-1");
+        });
+    }, 1000);
     showAnnouncement();
     const barWidth = shouldNarrow
       ? NARROW_SIDEBAR_WIDTH
@@ -125,10 +136,10 @@ export function SideBar(props: { className?: string }) {
         />
         <IconButton
           icon={<PluginIcon />}
-          text={CODE === '0' ? Locale.UserInfo.Name : Locale.Plugin.Name}
+          text={CODE === "0" ? Locale.UserInfo.Name : Locale.Plugin.Name}
           className={styles["sidebar-bar-button"]}
           onClick={() =>
-            navigate(CODE === '0' ? Path.Center : Path.Login, {
+            navigate(CODE === "0" ? Path.Center : Path.Login, {
               state: { fromHome: true },
             })
           }
