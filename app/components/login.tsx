@@ -416,7 +416,7 @@ export function Login() {
               登录
             </button>
           </div>
-          <div className={styles["login-go-register"]} onClick={() => navigate(Path.Register, { state: { fromHome: true } })}>前往注册</div>
+          {/* <div className={styles["login-go-register"]} onClick={() => navigate(Path.Register, { state: { fromHome: true } })}>前往注册</div> */}
         </form>
       </div>
     </ErrorBoundary>
