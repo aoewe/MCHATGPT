@@ -118,14 +118,14 @@ export function SideBar(props: { className?: string }) {
       }`}
     >
       <div className={styles["sidebar-header"]}>
-        <div className={styles["sidebar-title"]}>ChatGPT</div>
+        <div className={styles["sidebar-title"]}></div>
         <div className={styles["sidebar-sub-title"]}>自己的人工智能助手.</div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <ChatGptIcon />
         </div>
       </div>
 
-      <div className={styles["sidebar-header-bar"]}>
+      {/* <div className={styles["sidebar-header-bar"]}>
         <IconButton
           icon={<AutoIcon />}
           text={shouldNarrow ? undefined : Locale.Mask.Name}
@@ -145,7 +145,7 @@ export function SideBar(props: { className?: string }) {
           }
           shadow
         />
-      </div>
+      </div> */}
 
       <div
         className={styles["sidebar-body"]}
