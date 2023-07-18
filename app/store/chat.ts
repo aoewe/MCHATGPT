@@ -265,12 +265,6 @@ export const useChatStore = create<ChatStore>()(
           session.messages.push(userMessage);
           session.messages.push(botMessage);
         });
-
-        const CODE = localStorage.getItem("CODE")
-        const num = Number(CODE)
-        if (num != 0) {
-          botMessage.content = Locale.Error.Unauthorized;
-        } else {
           // make request
           // console.log("[User Input] ", sendMessages);
           requestChatStream(sendMessages, {
@@ -313,7 +307,7 @@ export const useChatStore = create<ChatStore>()(
             },
             modelConfig: { ...modelConfig },
           });
-        }
+        
       },
 
       getMemoryPrompt() {

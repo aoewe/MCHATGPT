@@ -76,18 +76,18 @@ function useDragSideBar() {
     !isMobileScreen && config.sidebarWidth < MIN_SIDEBAR_WIDTH;
 
   useEffect(() => {
-    setTimeout(function () {
-      const parame = {};
-      fetch
-        .notice(parame)
-        .then((res) => {
-          localStorage.setItem("CODE", res.code.toString());
-        })
-        .catch((error) => {
-          localStorage.setItem("CODE", "-1");
-        });
-    }, 1000);
-    showAnnouncement();
+    // setTimeout(function () {
+    //   const parame = {};
+    //   fetch
+    //     .notice(parame)
+    //     .then((res) => {
+    //       localStorage.setItem("CODE", res.code.toString());
+    //     })
+    //     .catch((error) => {
+    //       localStorage.setItem("CODE", "-1");
+    //     });
+    // }, 1000);
+    // showAnnouncement();
     const barWidth = shouldNarrow
       ? NARROW_SIDEBAR_WIDTH
       : limit(config.sidebarWidth ?? 300);
